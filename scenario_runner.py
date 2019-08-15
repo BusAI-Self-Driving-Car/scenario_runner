@@ -29,6 +29,7 @@ from srunner.scenariomanager.scenario_manager import ScenarioManager
 from srunner.scenarios.background_activity import *
 from srunner.scenarios.control_loss import *
 from srunner.scenarios.follow_leading_vehicle import *
+from srunner.scenarios.intention_aware_lane_change import *
 from srunner.scenarios.maneuver_opposite_direction import *
 from srunner.scenarios.master_scenario import *
 from srunner.scenarios.no_signal_junction_crossing import *
@@ -53,6 +54,7 @@ VERSION = 0.5
 SCENARIOS = {
     "BackgroundActivity": BACKGROUND_ACTIVITY_SCENARIOS,
     "FollowLeadingVehicle": FOLLOW_LEADING_VEHICLE_SCENARIOS,
+    "IntentionAwareLaneChange": INTENTION_AWARE_LANE_CHANGE_SCENARIOS,
     "ObjectCrossing": OBJECT_CROSSING_SCENARIOS,
     "RunningRedLight": RUNNING_RED_LIGHT_SCENARIOS,
     "NoSignalJunction": NO_SIGNAL_JUNCTION_SCENARIOS,
@@ -251,7 +253,6 @@ class ScenarioRunner(object):
         """
         Load and run the given scenario
         """
-
         # Load scenario and run it
         self.manager.load_scenario(scenario)
         self.manager.run_scenario()
@@ -302,7 +303,7 @@ class ScenarioRunner(object):
                 scenario_class = self.get_scenario_class_or_fail(config.type)
                 try:
                     CarlaActorPool.set_world(self.world)
-                    self.prepare_ego_vehicles(config)
+                    self.prepare_ego_vehicles(config, True)
                     scenario = scenario_class(self.world,
                                               self.ego_vehicles,
                                               config,
